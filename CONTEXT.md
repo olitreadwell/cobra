@@ -33,3 +33,4 @@
 
 ## Mined gaps (discovered, not yet attempted)
 - `2026-09-04` docs/manpage: `doc/man_docs.go` manPreamble writes `cmd.UseLine()` raw into markdown fed to md2man; angle brackets like `[<remote>:]<instance>` are interpreted as HTML tags and stripped (repro: `GenMan` on a command with `Use: "incus [<remote>:]<instance>"` → SYNOPSIS shows `incus [:]`). Expected: `incus [<remote>:]<instance>`. Fix: escape `<`/`>` with backslash before writing. Dedupe: issue #2330 open, no open/closed/merged PR. — status: proposed
+- `2026-09-04` self-found gap: man page generation strips angle brackets from UseLine (issue #2330) — outcome: pr-opened (https://github.com/olitreadwell/cobra/pull/2). Lesson: verified repro with GenMan, escaped `<`/`>` with backslash, added regression test. Fork CI not connected (0 workflow runs) — locally verified go test/vet/gofmt.
