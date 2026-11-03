@@ -151,9 +151,17 @@ func manPreamble(buf io.StringWriter, header *GenManHeader, cmd *cobra.Command, 
 `, header.Title, header.Section, header.date, header.Source, header.Manual))
 	cobra.WriteStringAndCheck(buf, fmt.Sprintf("%s \\- %s\n\n", dashedName, cmd.Short))
 	cobra.WriteStringAndCheck(buf, "# SYNOPSIS\n")
-	cobra.WriteStringAndCheck(buf, fmt.Sprintf("**%s**\n\n", cmd.UseLine()))
+	cobra.WriteStringAndCheck(buf, fmt.Sprintf("**%s**\n\n", escapeAngleBrackets(cmd.UseLine())))
 	cobra.WriteStringAndCheck(buf, "# DESCRIPTION\n")
 	cobra.WriteStringAndCheck(buf, description+"\n\n")
+}
+
+// escapeAngleBrackets escapes angle brackets so they are not interpreted as
+// HTML tags by the markdown-to-man converter.
+func escapeAngleBrackets(s string) string {
+	s = strings.ReplaceAll(s, "<", "\\<")
+	s = strings.ReplaceAll(s, ">", "\\>")
+	return s
 }
 
 func manPrintFlags(buf io.StringWriter, flags *pflag.FlagSet) {

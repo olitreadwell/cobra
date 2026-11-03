@@ -229,3 +229,19 @@ func BenchmarkGenManToFile(b *testing.B) {
 		}
 	}
 }
+
+func TestGenManAngleBrackets(t *testing.T) {
+	cmd := &cobra.Command{
+		Use:   "incus [<remote>:]<instance>",
+		Short: "test",
+	}
+
+	buf := new(bytes.Buffer)
+	header := &GenManHeader{Title: "incus", Section: "1"}
+	if err := GenMan(cmd, header, buf); err != nil {
+		t.Fatal(err)
+	}
+	output := buf.String()
+
+	checkStringContains(t, output, `\fBincus [<remote>:]<instance> [flags]\fP`)
+}
